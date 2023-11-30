@@ -1,3 +1,25 @@
+#' Load in climate data from NASA
+#'
+#' Loads in global or hemispheric data from NASA at different intervals.
+#'
+#' @param type A character string. Either \code{"GLB"}, \code{"NH"}, or \code{"SH"} for global, northern,
+#' or southern hemisphere temperature anomalies respectively. Defaults to \code{"GLB"}.
+#'
+#' @return An object of class \code{"climr"} which is a list of \code{\link[tibble]{tibble}}s which
+#' contain the yearly, quarterly, and monthly values for each time series respectively.
+#'
+#' @note A dedicated \code{\link{fit}} function is provided for objects of class \code{"climr"}.
+#'
+#' @export
+#' @author Keefe Murphy - <\email{keefe.murphy@@mu.ie}>
+#'
+#' @importFrom dplyr "mutate" "select" "arrange"
+#' @importFrom tidyr "pivot_longer"
+#' @importFrom readr "parse_factor" "read_csv"
+#'
+#' @seealso \code{\link{fit}}, \code{\link{plot.climr_fit}}
+#' @examples
+#' dat <- load_climr(type = "SH")
 load_climr <- function(type = c("GLB", "NH", "SH")) {
 
   ## match.arg() is a useful debugging function:
@@ -27,7 +49,7 @@ load_climr <- function(type = c("GLB", "NH", "SH")) {
     mutate(year = Year, # note: changing to lowercase for the sake of tidyness
            temp = `J-D`, # note: use of backticks to extract numbers rather than characters
            x = year) |> # note: using x here to have a generic "x" for use with modelling later
-    select(year, temp, x) |>
+    select(year, temp, x) %>%
     arrange(x)
 
   ## Sort out the monthly data
