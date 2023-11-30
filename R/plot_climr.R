@@ -13,7 +13,7 @@ plot.climr_fit <- function(x, time_grid = pretty(x$data$x, n=100), ...) {
                  },
                  loess = {
                    tibble(time_grid, pred=predict(x$model,
-                                                  newdata=tibble(x=time_grid))) |> na.omit()
+                                                  newdata=tibble(x=time_grid))) |> stats::na.omit()
                  },
                  smooth.spline = {
                    tibble(time_grid, pred=predict(x$model, tibble(time_grid))$y[,1])
