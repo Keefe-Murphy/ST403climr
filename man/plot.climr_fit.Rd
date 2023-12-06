@@ -14,7 +14,7 @@
 \item{...}{Catches unused arguments to \code{plot} (not currently implemented).}
 }
 \value{
-A nice ggplot is returned invisibly.
+Just a nice ggplot, returned invisibly to enable further modification (see examples).
 }
 \description{
 Plots different types of fitted models for global or hemispheric data from NASA at different intervals.
@@ -27,6 +27,13 @@ mod3 <- fit(dat, data_type="quarterly", fit_type="loess")
 plot(mod1)
 plot(mod2)
 plot(mod3)
+
+# Invisible returning
+\dontrun{
+library(ggplot2)
+p <- plot(mod3)
+p + ylab("Temperature Anomaly (Celsius)")
+}
 }
 \seealso{
 \code{\link{fit}}, \code{\link{load_climr}}

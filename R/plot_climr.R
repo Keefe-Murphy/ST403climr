@@ -6,7 +6,7 @@
 #' @param time_grid An optional time grid over which to produce fitted values of the model. Defaults to an interval of length \code{100}.
 #' @param ... Catches unused arguments to \code{plot} (not currently implemented).
 #'
-#' @return Nothing, just a nice ggplot.
+#' @return Just a nice ggplot, returned invisibly to enable further modification (see examples).
 #'
 #' @importFrom ggplot2 "ggplot" "aes" "xlab" "ylab" "theme_bw" "geom_point" "geom_line" "theme" "scale_color_viridis_c" "ggtitle"
 #' @importFrom tidyr "tibble"
@@ -21,6 +21,13 @@
 #' plot(mod1)
 #' plot(mod2)
 #' plot(mod3)
+#'
+#' # Invisible returning
+#' \dontrun{
+#' library(ggplot2)
+#' p <- plot(mod3)
+#' p + ylab("Temperature Anomaly (Celsius)")
+#' }
 plot.climr_fit <- function(x, time_grid = pretty(x$data$x, n=100), ...) {
 
   ## Create a nice plot from the output of fit.climr()

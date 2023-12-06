@@ -1,7 +1,7 @@
 Package: ST403climr
 Type: Package
 Title: Analyse and Plot the Latest Global and Hemispheric Climate Data
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: person("Keefe", "Murphy", email="keefe.murphy@mu.ie", role=c("aut", "cre"))
 Description: Downloads the latest climate data from NASA at monthly, quarterly, and yearly intervals. Performs basic modelling of said data and creates nice plots of temperature anomalies over time.
 License: GPL (>= 3)
