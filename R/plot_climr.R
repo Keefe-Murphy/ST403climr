@@ -8,6 +8,8 @@
 #'
 #' @return Nothing, just a nice ggplot.
 #'
+#' @importFrom ggplot2 "ggplot" "aes" "xlab" "ylab" "theme_bw" "geom_point" "geom_line" "theme" "scale_color_viridis_c" "ggtitle"
+#' @importFrom tidyr "tibble"
 #' @export
 #' @author Keefe Murphy - <\email{keefe.murphy@@mu.ie}>
 #' @seealso \code{\link{fit}}, \code{\link{load_climr}}
@@ -37,7 +39,7 @@ plot.climr_fit <- function(x, time_grid = pretty(x$data$x, n=100), ...) {
                                                          newdata=tibble(x=time_grid))) |> stats::na.omit()
                  },
                  smooth.spline = {
-                   tibble(time_grid, pred=predict(x$model, tibble(time_grid))$y[,1])
+                   tibble(time_grid, pred=stats::predict(x$model, tibble(time_grid))$y[,1])
                  })
 
   ## Finally, create the plot

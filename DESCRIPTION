@@ -12,6 +12,5 @@ URL: https://github.com/Keefe-Murphy/ST403climr
 Imports: dplyr,
   ggplot2,
   readr,
-  tibble,
-  viridis
+  tidyr
 RoxygenNote: 7.2.3

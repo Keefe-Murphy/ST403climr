@@ -19,6 +19,8 @@ fit(
 
 \item{fit_type}{The type of model required, either linear regression (\code{"lm"}) by default,
 \code{"loess"}, or smoothing splines (\code{"smooth.spline"}).}
+
+\item{...}{Catches unused arguments.}
 }
 \value{
 An object of class \code{"climr_fit"} which includes the model details

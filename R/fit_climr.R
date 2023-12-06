@@ -6,6 +6,7 @@
 #' (the default), \code{"quarterly"}, or \code{"monthly"}.
 #' @param fit_type The type of model required, either linear regression (\code{"lm"}) by default,
 #' \code{"loess"}, or smoothing splines (\code{"smooth.spline"}).
+#' @param ... Catches unused arguments.
 #'
 #' @return An object of class \code{"climr_fit"} which includes the model details
 #' as well as the data set and \code{fit_type} used.
@@ -33,7 +34,8 @@ fit <- function(obj,
 #' @export
 fit.climr <- function(obj,
                       data_type = c("yearly", "quarterly", "monthly"),
-                      fit_type = c("lm", "loess", "smooth.spline")) {
+                      fit_type = c("lm", "loess", "smooth.spline"),
+                      ...) {
 
   ## Ensure the input is of class "climr"
   if(!inherits(obj, "climr")) stop("This function only works on objects of class \"climr\"")
