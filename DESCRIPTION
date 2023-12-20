@@ -1,5 +1,6 @@
 Package: ST403climr
 Type: Package
+Date: 2023-12-14
 Title: Analyse and Plot the Latest Global and Hemispheric Climate Data
 Version: 0.1.1
 Authors@R: person("Keefe", "Murphy", email="keefe.murphy@mu.ie", role=c("aut", "cre"))
@@ -14,3 +15,7 @@ Imports: dplyr,
   readr,
   tidyr
 RoxygenNote: 7.2.3
+Suggests: bookdown,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

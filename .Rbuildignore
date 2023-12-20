@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 ^LICENSE\.md$
 testing_climr.R
+^doc$
+^Meta$

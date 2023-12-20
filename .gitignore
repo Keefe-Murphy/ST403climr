@@ -3,3 +3,6 @@
 .RData
 .Ruserdata
 testing_climr.R
+inst/doc
+/doc/
+/Meta/

@@ -1,0 +1,145 @@
+---
+title: "ST403climr"
+output: 
+  bookdown::html_document2:
+      base_format: rmarkdown::html_vignette
+      fig_caption: yes
+      number_sections: no
+urlcolor: blue
+header-includes:
+  \usepackage{amsmath}
+vignette: >
+  %\VignetteIndexEntry{ST403climr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{ggplot2}
+  %\VignetteDepends{bookdown}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  fig.width = 7,
+  fig.height = 5,
+  fig.align = "center",
+  message = FALSE,
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup, echo=FALSE}
+library(ST403climr)
+```
+
+## Introduction
+
+__ST403climr__ is an R package which downloads the latest climate data from NASA at monthly, quarterly, and yearly intervals, performs basic modelling of said data, and creates nice plots of temperature anomalies over time. Three functions are provided:
+
+  1. `load_climr()`: for loading in the data in a tidy format,
+  
+  2. a `fit()` method: for fitting statistical models to said data,
+  
+  3. and a `plot()` method for producing nice visualisations.
+  
+Typically, these functions are applied sequentially. This vignette aims to demonstrate a typical workflow of the `ST403climr` package.
+
+### Installation
+
+__ST403climr__ will run in Windows, Mac OS X, or Linux. To install it you first need to install [R](https://cran.r-project.org/). Installing [RStudio](https://www.rstudio.com/) as a nice desktop environment for using R is also recommended.
+
+Once in R you can type at the R command prompt:
+
+```{r, eval=FALSE}
+install.packages('devtools')
+devtools::install_github('Keefe-Murphy/ST403climr')
+```
+
+to install the latest development version of the package from the __ST403climr__ [GitHub page](https://github.com/Keefe-Murphy/ST403climr). 
+
+In either case, if you then type:
+
+```{r, eval=FALSE}
+library(ST403climr)
+```
+
+it will load in all the aforementioned __ST403climr__ functions.
+
+Some features may not yet be fully tested, and occasionally this version might be liable to break when it is in the process of being updated. If you find bugs or want to suggest new features please visit the [GitHub issues page](https://github.com/Keefe-Murphy/ST403climr/issues). 
+
+## `load_climr()`
+
+This function loads in global or hemispheric data from NASA at different intervals. It's sole argument `type` determines whether global (`"GLB"`, the default), northern hemisphere (`"NH"`), or southern hemisphere (`"SH"`) data is returned. The output will contain the yearly, quarterly, and monthly values for the respective time series. In the example below, southern hemisphere data is returned in a tidy format.
+
+```{r}
+sh_dat <- load_climr(type = "SH")
+sh_dat
+```
+
+## `fit()`
+
+A dedicated `fit()` method is provided for objects returned by `load_climr()`. This function will fit the model indicated by the `fit_type` argument to data at the intervals specified by the `data_type` argument. In the example below, a linear model is fit to the southern hemisphere data at yearly intervals. The linear model takes the form
+
+\begin{align*}
+y_i &= \beta_0 + \beta_1 x_i + \epsilon_i\\
+\epsilon_i & \sim \mbox{N}\left(0, \sigma^2\right)
+\end{align*}
+
+where $y_i$ represents the temperature anomaly, $x_i$ represents the time points, $\epsilon_i$ is a homoscedastic Gaussian error term, and $\beta_0$ and $\beta_1$ are the intercept and slope parameters, respectively.
+
+```{r}
+mod <- fit(sh_dat, 
+           data_type="yearly", 
+           fit_type="lm")
+```
+
+Here, the slope parameter indicates that the temperature anomaly increases by approximately `r round(coef(mod$model)[2], 3)` degrees Celsius for each year in the considered range.
+
+To instead fit smoothing splines to the monthly northern hemisphere data at quarterly intervals, both functions could be combined as follows:
+
+```{r, eval=FALSE}
+mod2 <- fit(load_climr("NH"), 
+            data_type="quarterly", 
+            fit_type="smooth.spline")
+```
+
+## `plot()`
+
+The `plot()` method provided simply plots the output of the fitted model. Taking `mod` from above, a plot can be created simply by typing `plot(mod)`.
+
+```{r, echo=FALSE}
+plot(mod)
+```
+
+This too can be combined with the other functions
+
+```{r loessplot, fig.cap="LOESS smoothing applied to global temperature anomaly data from NASA at monthly intervals", results="hide"}
+plot(fit(load_climr(), 
+         data_type="monthly", 
+         fit_type="loess"))
+```
+
+Figure \@ref(fig:loessplot) appears to indicate that the assumption of linearity from the linear `mod2` is inappropriate for these temperature data sets.
+
+```{r, include=FALSE}
+mod3 <- fit(load_climr("SH"), 
+            data_type="yearly", 
+            fit_type="smooth.spline")
+```
+
+The output of the plot function - a nice `ggplot` - can also be returned invisibly, such that further modifications can be made by adding additional layers. Assuming for instance that `mod3` represents smoothing splines fitted to the southern hemisphere data at yearly intervals, we can type the following to modify the title of the plot.
+
+```{r, eval=FALSE}
+library(ggplot2)
+p <- plot(mod3)
+p + ggtitle("Smoothing splines fit to yearly southern hemisphere\ntemperature anomaly data from NASA")
+```
+
+```{r, include=FALSE}
+library(ggplot2)
+p <- plot(mod3) + 
+  ggtitle("Smoothing splines fit to yearly southern hemisphere\ntemperature anomaly data from NASA")
+```
+
+```{r, echo=FALSE}
+p
+```
